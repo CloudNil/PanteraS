@@ -1,9 +1,9 @@
 # PanteraS
 # Platform as a Service based on Paas in a box project
 #
-FROM ubuntu:14.04.3
+FROM ubuntu:14.04.4
 
-MAINTAINER Shi ShaoHu "tiger435@sina.com"
+MAINTAINER Shi Shaohu "tiger435@sina.com"
 
 RUN locale-gen en_US.UTF-8
 
@@ -32,9 +32,6 @@ RUN apt-get update \
       libapparmor1 \
    && apt-get clean
 
-RUN pip install supervisor-stdout
-RUN pip install https://github.com/Supervisor/supervisor/archive/3.2-branch.zip
-
 # install Java 8
 RUN echo "deb http://ppa.launchpad.net/webupd8team/java/ubuntu trusty main" > /etc/apt/sources.list.d/java-trusty.list \
     && gpg --keyserver hkp://keyserver.ubuntu.com:80 --recv EEA14886 && gpg --export --armor EEA14886 | apt-key add - \
@@ -45,17 +42,23 @@ RUN echo "deb http://ppa.launchpad.net/webupd8team/java/ubuntu trusty main" > /e
     && update-alternatives --display java \
     && echo "JAVA_HOME=/usr/lib/jvm/java-8-oracle" >> /etc/environment
 
-ENV DOCKER_APP_VERSION            1.9.1-0~trusty
-ENV CONSUL_APP_VERSION            0.6.3
+ENV SUPERVISORD_APP_VERSION       3.2.3
+ENV DOCKER_APP_VERSION            1.11.0-0~trusty
+ENV CONSUL_APP_VERSION            0.6.4
 ENV CONSUL_TEMPLATE_APP_VERSION   0.12.1
 ENV HAPROXY_APP_VERSION           1.5.14-1ubuntu0.15.10.1~ubuntu14.04.1
-ENV MESOS_APP_VERSION             0.26.0-0.2.145.ubuntu1404
-ENV MARATHON_APP_VERSION          0.15.1-1.0.459.ubuntu1404
-ENV REGISTRATOR_APP_VERSION       v6
+ENV MESOS_APP_VERSION             0.28.0-2.0.16.ubuntu1404
+ENV MARATHON_APP_VERSION          1.1.0-1.0.471.ubuntu1404
+ENV REGISTRATOR_APP_VERSION       v7
 ENV CHRONOS_APP_VERSION           2.4.0-0.1.20151007110204.ubuntu1404
-ENV FABIO_APP_VERSION             1.0.8
+ENV FABIO_APP_VERSION             1.1.1
 
 ENV DOCKER_HOST unix:///tmp/docker.sock
+
+# SupervisorD
+#
+RUN pip install supervisor-stdout
+RUN pip install https://github.com/Supervisor/supervisor/archive/${SUPERVISORD_APP_VERSION}.zip
 
 
 # CONSUL
@@ -64,8 +67,8 @@ RUN mkdir /opt/consul && mkdir /etc/consul.d/
 ENV PATH $PATH:/opt/consul
 WORKDIR /opt/consul
 
-RUN wget --no-check-certificate https://releases.hashicorp.com/consul/${CONSUL_APP_VERSION}/consul_${CONSUL_APP_VERSION}_linux_amd64.zip \
-    && wget --no-check-certificate https://releases.hashicorp.com/consul/${CONSUL_APP_VERSION}/consul_${CONSUL_APP_VERSION}_web_ui.zip \
+RUN wget https://releases.hashicorp.com/consul/${CONSUL_APP_VERSION}/consul_${CONSUL_APP_VERSION}_linux_amd64.zip \
+    && wget https://releases.hashicorp.com/consul/${CONSUL_APP_VERSION}/consul_${CONSUL_APP_VERSION}_web_ui.zip \
     && unzip consul_${CONSUL_APP_VERSION}_linux_amd64.zip \
     && unzip consul_${CONSUL_APP_VERSION}_web_ui.zip \
     && rm consul_*.zip
@@ -163,9 +166,9 @@ RUN mkdir /opt/fabio
 ENV PATH ${PATH}:/opt/fabio
 WORKDIR /opt/fabio
 ADD fabio.properties /opt/fabio/fabio.properties
-RUN wget https://github.com/eBay/fabio/releases/download/v${FABIO_APP_VERSION}/fabio-${FABIO_APP_VERSION}_linux-amd64 \
-    && chmod a+x fabio-${FABIO_APP_VERSION}_linux-amd64 \
-    && ln -s fabio-${FABIO_APP_VERSION}_linux-amd64 fabio
+RUN wget https://github.com/eBay/fabio/releases/download/v${FABIO_APP_VERSION}/fabio-${FABIO_APP_VERSION}-go1.6_linux-amd64 \
+    && chmod a+x fabio-${FABIO_APP_VERSION}-go1.6_linux-amd64 \
+    && ln -s fabio-${FABIO_APP_VERSION}-go1.6_linux-amd64 fabio
 
 # Font for logo
 RUN wget https://raw.githubusercontent.com/patorjk/figlet.js/master/fonts/Elite.flf -O /usr/share/figlet/Elite.flf

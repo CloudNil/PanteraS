@@ -121,7 +121,7 @@ MESOS_MASTER_PARAMS="--zk=zk://${ZOOKEEPER_HOSTS}/mesos \
  --ip=${LISTEN_IP} \
  --hostname=${FQDN} \
  --cluster=${MESOS_CLUSTER_NAME} \
- --log_dir=/var/log/PanteraS \
+ --log_dir=/var/log/Toots \
  --quiet \
  --logbufsecs=10 \
  ${MESOS_MASTER_PARAMS}"
@@ -137,12 +137,12 @@ MESOS_SLAVE_PARAMS="--master=zk://${ZOOKEEPER_HOSTS}/mesos \
  --docker_socket=/tmp/docker.sock \
  --launcher=posix \
  --cgroups_limit_swap \
- --log_dir=/var/log/PanteraS \
+ --log_dir=/var/log/Toots \
  --quiet \
  --logbufsecs=10 \
  ${MESOS_SLAVE_PARAMS}"
 #
-REGISTRATOR_PARAMS="-ip=${HOST_IP} consul://${CONSUL_IP}:8500 \
+REGISTRATOR_PARAMS="-cleanup -ip=${HOST_IP} consul://${CONSUL_IP}:8500 \
  ${REGISTRATOR_PARAMS}"
 #
 ZOOKEEPER_PARAMS="start-foreground"
