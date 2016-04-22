@@ -71,5 +71,5 @@ panteras:
     - "/var/lib/docker:/var/lib/docker"
     - "/sys:/sys"
     - "/tmp/mesos:/tmp/mesos"
-    - "/var/log/PanteraS:/var/log/PanteraS"
+    - "/var/log/Toots:/var/log/Toots"
     ${VOLUME_DOCKER}
