@@ -1,4 +1,4 @@
-# PanteraS
+# Toots
 # Platform as a Service based on Paas in a box project
 #
 FROM ubuntu:14.04.4

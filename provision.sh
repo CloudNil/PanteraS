@@ -1,6 +1,6 @@
 #!/bin/bash
 
-paas="PanteraS"
+paas="Toots"
 REPODIR=`dirname $0`
 IMAGE="panteras/paas-in-a-box:latest"
 
